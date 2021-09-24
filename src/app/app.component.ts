@@ -36,6 +36,7 @@ export class AppComponent implements OnInit {
 
 	ngOnInit(){
 		this.loginEOSService.loggedIn.subscribe(() => {
+			console.log(this.loginEOSService.accountInfo.permission);
 			/*this.loginEOSService.eos.getTableRows({  code: "simpleassets",
                               json: true,
                               limit: 100,

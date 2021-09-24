@@ -74,7 +74,7 @@ export class LoginEOSService {
   initCounterErr = 0;
   eosTock: any;
   inProgress = false;
-  accountInfo = { publicKey: '' };
+  accountInfo = { publicKey: '', permission: '' };
   ledgerAccName = '';
   ledger: any;  user: any;
   requestAccount = 'myprotonacc'; // optional
@@ -194,6 +194,8 @@ export class LoginEOSService {
       session = identity.session;
       this.showMessage(`Hi ${this.accountName} :)`);
     }
+
+    this.accountInfo['permission'] = session.auth.permission;
 
     // set appropriate localstorage values for uml
     localStorage.setItem('walletConnected', 'connected');
@@ -322,7 +324,7 @@ export class LoginEOSService {
     try {
       await this.wax.login();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
 
     const accountName = this.WINDOW.localStorage.getItem("ual-wax:autologin");
@@ -332,6 +334,8 @@ export class LoginEOSService {
       this.accountName = acc['userAccount'];
       this.options = { authorization: [`${this.accountName}@active`] };
       this.accountInfo['publicKey'] = acc['pubKeys'][0];
+
+      this.accountInfo['permission'] = 'active';
 
       const wax: any = new waxjs.WaxJS(this.config.httpEndpoint, undefined, undefined, false);
       
@@ -346,7 +350,7 @@ export class LoginEOSService {
       this.closePopUp();
       this.showMessage(`Hi ${this.accountName} :)`);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
 
     this.eos['transaction'] = ({ actions }, broadcast: true, sign: false) => {
@@ -429,7 +433,7 @@ export class LoginEOSService {
       return this.toastyService.error(toastOption);
     }
     const msg = error.message;
-    console.log('Scatter error type - ', error);
+    console.error('Scatter error type - ', error);
     if ((error.type === 'identity_rejected' || error.type === 'locked') && !this.connected) {
       location.reload();
     }
@@ -445,7 +449,7 @@ export class LoginEOSService {
       try {
         err = JSON.parse(err).error.details[0].message;
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     } else {
       err = err.message;
