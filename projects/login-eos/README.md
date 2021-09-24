@@ -6,7 +6,7 @@
 scatter-core
 scatterjs-plugin-eosjs
 eosjs@20.0.0
-@waxio/waxjs@0.0.15
+@waxio/waxjs@0.0.11
 anchor-link@2.0.1
 ```
 
